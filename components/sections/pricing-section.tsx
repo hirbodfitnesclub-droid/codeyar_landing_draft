@@ -3,46 +3,46 @@ import Link from "next/link"
 
 const plans = [
   {
-    name: "Starter",
-    description: "Perfect for side projects and small teams",
-    price: "$0",
-    period: "forever",
-    features: ["Up to 3 team members", "5 projects", "Basic analytics", "Community support", "1GB storage"],
-    cta: "Get Started",
+    name: "پایه",
+    description: "ایده‌آل برای پروژه‌های جانبی و تیم‌های کوچک",
+    price: "رایگان",
+    period: "همیشگی",
+    features: ["تا ۳ عضو تیم", "۵ پروژه", "آنالیز پایه", "پشتیبانی انجمن", "۱ گیگابایت فضای ذخیره‌سازی"],
+    cta: "شروع کنید",
     highlighted: false,
   },
   {
-    name: "Pro",
-    description: "For growing teams that need more power",
-    price: "$29",
-    period: "/month",
+    name: "حرفه‌ای",
+    description: "برای تیم‌های در حال رشد که به قدرت بیشتری نیاز دارند",
+    price: "۲۹۰٬۰۰۰",
+    period: "تومان/ماه",
     features: [
-      "Unlimited team members",
-      "Unlimited projects",
-      "Advanced analytics",
-      "Priority support",
-      "100GB storage",
-      "Custom integrations",
-      "API access",
+      "تعداد نامحدود اعضای تیم",
+      "تعداد نامحدود پروژه",
+      "آنالیز پیشرفته",
+      "پشتیبانی اولویت‌دار",
+      "۱۰۰ گیگابایت فضای ذخیره‌سازی",
+      "یکپارچه‌سازی‌های سفارشی",
+      "دسترسی به API",
     ],
-    cta: "Start Free Trial",
+    cta: "شروع دوره رایگان",
     highlighted: true,
   },
   {
-    name: "Enterprise",
-    description: "For large organizations with custom needs",
-    price: "Custom",
+    name: "سازمانی",
+    description: "برای سازمان‌های بزرگ با نیازهای خاص",
+    price: "سفارشی",
     period: "",
     features: [
-      "Everything in Pro",
-      "Dedicated account manager",
-      "Custom SLA",
-      "On-premise deployment",
-      "Unlimited storage",
-      "Advanced security",
-      "Training & onboarding",
+      "تمام امکانات نسخه حرفه‌ای",
+      "مدیر حساب اختصاصی",
+      "تضمین سطح خدمات (SLA) سفارشی",
+      "استقرار در محل",
+      "فضای ذخیره‌سازی نامحدود",
+      "امنیت پیشرفته",
+      "آموزش و همراهی اختصاصی",
     ],
-    cta: "Contact Sales",
+    cta: "تماس با فروش",
     highlighted: false,
   },
 ]
@@ -53,12 +53,12 @@ export function PricingSection() {
       <div className="max-w-5xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">Pricing</p>
+          <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">قیمت‌گذاری</p>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-zinc-100 mb-4">
-            Simple, transparent pricing
+            قیمت‌گذاری ساده و شفاف
           </h2>
           <p className="text-zinc-500 max-w-xl mx-auto text-balance text-lg">
-            No hidden fees. No surprises. Choose the plan that works for you.
+            بدون هزینه‌های پنهان. بدون غافلگیری. طرحی را که برای شما مناسب است انتخاب کنید.
           </p>
         </div>
 

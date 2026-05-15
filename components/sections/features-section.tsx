@@ -27,12 +27,12 @@ export function FeaturesSection() {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">Features</p>
+          <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">امکانات</p>
           <h2 className="font-display text-3xl md:text-4xl font-bold text-zinc-100 mb-4">
-            Everything you need to succeed
+            هر آن‌چه برای موفقیت نیاز دارید
           </h2>
           <p className="text-zinc-500 max-w-xl mx-auto text-balance">
-            Powerful features designed to help you ship better products, faster.
+            ویژگی‌های قدرتمند طراحی شده برای کمک به شما در انتشار محصولات بهتر و سریع‌تر.
           </p>
         </motion.div>
 
@@ -55,10 +55,10 @@ export function FeaturesSection() {
                   >
                     <BarChart3 className="w-5 h-5 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
                   </motion.div>
-                  <p className="font-heading font-semibold text-zinc-100">Real-time Dashboard</p>
+                  <p className="font-heading font-semibold text-zinc-100">داشبورد بلادرنگ</p>
                 </div>
                 <p className="text-zinc-500 text-sm mb-5">
-                  Track every metric that matters with customizable dashboards.
+                  هر شاخص مهمی را با داشبوردهای قابل تنظیم دنبال کنید.
                 </p>
                 <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-4 overflow-hidden">
                   <div className="flex items-center justify-between mb-4">
@@ -76,7 +76,7 @@ export function FeaturesSection() {
                         transition={{ delay: 0.5 }}
                       >
                         <div className="w-2 h-2 rounded-full bg-zinc-400" />
-                        <span className="text-xs text-zinc-500">Users</span>
+                        <span className="text-xs text-zinc-500">کاربران</span>
                       </motion.div>
                       <motion.div
                         className="flex items-center gap-1.5"
@@ -86,16 +86,16 @@ export function FeaturesSection() {
                         transition={{ delay: 0.6 }}
                       >
                         <div className="w-2 h-2 rounded-full bg-zinc-600" />
-                        <span className="text-xs text-zinc-500">Revenue</span>
+                        <span className="text-xs text-zinc-500">درآمد</span>
                       </motion.div>
                     </div>
                   </div>
                   {/* Animated metrics row */}
                   <div className="grid grid-cols-3 gap-3 mb-4">
                     {[
-                      { label: "Total Users", value: "12.4K", change: "+12%" },
-                      { label: "Revenue", value: "$48.2K", change: "+8%" },
-                      { label: "Conversion", value: "3.2%", change: "+2%" },
+                      { label: "کل کاربران", value: "۱۲٫۴ هزار", change: "+۱۲٪" },
+                      { label: "درآمد", value: "۴۸٫۲ هزار تومان", change: "+۸٪" },
+                      { label: "نرخ تبدیل", value: "۳٫۲٪", change: "+۲٪" },
                     ].map((metric, i) => (
                       <motion.div
                         key={metric.label}
@@ -164,9 +164,9 @@ export function FeaturesSection() {
                   >
                     <Zap className="w-5 h-5 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
                   </motion.div>
-                  <p className="font-heading font-semibold text-zinc-100">Blazing Fast</p>
+                  <p className="font-heading font-semibold text-zinc-100">سرعت خیره‌کننده</p>
                 </div>
-                <p className="text-zinc-500 text-sm mb-5">Optimized for speed at any scale.</p>
+                <p className="text-zinc-500 text-sm mb-5">بهینه‌سازی شده برای سرعت در هر مقیاسی.</p>
                 <div className="mt-auto">
                   <div className="flex items-baseline gap-2 mb-3">
                     <motion.span
@@ -175,9 +175,9 @@ export function FeaturesSection() {
                       whileInView={{ opacity: 1 }}
                       viewport={{ once: true }}
                     >
-                      99.9%
+                      ۹۹٫۹٪
                     </motion.span>
-                    <span className="text-zinc-500 text-sm">uptime</span>
+                    <span className="text-zinc-500 text-sm">آماده‌باش</span>
                   </div>
                   <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
                     <motion.div
@@ -210,9 +210,9 @@ export function FeaturesSection() {
                   >
                     <Command className="w-5 h-5 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
                   </motion.div>
-                  <p className="font-heading font-semibold text-zinc-100">Keyboard First</p>
+                  <p className="font-heading font-semibold text-zinc-100">کیبورد در اولویت</p>
                 </div>
-                <p className="text-zinc-500 text-sm mb-5">Every action is just a keystroke away.</p>
+                <p className="text-zinc-500 text-sm mb-5">هر اکشنی فقط به اندازه یک فشردن کلید فاصله دارد.</p>
                 <div className="flex justify-center gap-2 mt-auto">
                   {["⌘", "K"].map((key, i) => (
                     <motion.div
@@ -254,9 +254,9 @@ export function FeaturesSection() {
                   >
                     <Layers className="w-5 h-5 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
                   </motion.div>
-                  <p className="font-heading font-semibold text-zinc-100">100+ Integrations</p>
+                  <p className="font-heading font-semibold text-zinc-100">بیش از ۱۰۰ یکپارچه‌سازی</p>
                 </div>
-                <p className="text-zinc-500 text-sm mb-5">Connect with tools you already use daily.</p>
+                <p className="text-zinc-500 text-sm mb-5">با ابزارهایی که روزانه استفاده می‌کنید متصل شوید.</p>
                 <div className="grid grid-cols-8 gap-2 mt-auto">
                   {integrationLogos.map((logo, i) => (
                     <motion.div
@@ -273,10 +273,10 @@ export function FeaturesSection() {
                   ))}
                 </div>
                 <motion.button
-                  whileHover={{ x: 6 }}
+                  whileHover={{ x: -6 }}
                   className="mt-4 flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
                 >
-                  View all integrations <ArrowRight className="w-4 h-4" />
+                  مشاهده همه یکپارچه‌سازی‌ها <ArrowRight className="w-4 h-4 rtl:rotate-180" />
                 </motion.button>
               </CardContent>
             </Card>

@@ -5,58 +5,58 @@ import { TestimonialsColumn } from "@/components/ui/testimonials-column"
 
 const testimonials = [
   {
-    text: "This platform completely transformed how we build products. We shipped our MVP in 2 weeks instead of 2 months.",
+    text: "این پلتفرم نحوه ساخت محصولات ما را کاملاً تغییر داد. ما MVP خود را به جای ۲ ماه، در ۲ هفته منتشر کردیم.",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face",
-    name: "Sarah Chen",
-    role: "CTO at TechFlow",
+    name: "سارا محمدی",
+    role: "مدیر فنی در تک‌فلو",
   },
   {
-    text: "The best investment we've made for our engineering team. The ROI was immediate and substantial.",
+    text: "بهترین سرمایه‌گذاریی که برای تیم مهندسی خود انجام دادیم. بازگشت سرمایه فوری و قابل توجه بود.",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-    name: "Marcus Johnson",
-    role: "VP Engineering at Scale",
+    name: "امیر رضایی",
+    role: "معاون مهندسی در اسکیل",
   },
   {
-    text: "Finally, a tool that actually delivers on its promises. Our deployment time went from hours to minutes.",
+    text: "بالاخره ابزاری که واقعاً به وعده‌هایش عمل می‌کند. زمان استقرار ما از ساعت‌ها به دقایق کاهش یافت.",
     image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
-    name: "Emily Rodriguez",
-    role: "Lead Developer at Nexus",
+    name: "مریم حسینی",
+    role: "توسعه‌دهنده ارشد در نکسوس",
   },
   {
-    text: "Implementing this was smooth and quick. The customizable interface made team onboarding effortless.",
+    text: "پیاده‌سازی این سیستم بسیار روان و سریع بود. رابط کاربری قابل تنظیم، آموزش تیم را بی‌دردسر کرد.",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    name: "David Park",
-    role: "IT Manager",
+    name: "داوود پارسا",
+    role: "مدیر IT",
   },
   {
-    text: "The support team is exceptional, guiding us through setup and providing ongoing assistance.",
+    text: "تیم پشتیبانی استثنایی است و ما را در تمام مراحل راه‌اندازی و فراتر از آن راهنمایی کردند.",
     image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
-    name: "Aisha Patel",
-    role: "Customer Success Lead",
+    name: "آیسا پناهی",
+    role: "مدیر موفقیت مشتریان",
   },
   {
-    text: "Seamless integration enhanced our business operations and efficiency. Highly recommend.",
+    text: "یکپارچه‌سازی بی‌نقص، عملیات تجاری و کارایی ما را بهبود بخشید. به شدت توصیه می‌شود.",
     image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
-    name: "James Wilson",
-    role: "CEO at Quantum",
+    name: "جواد قاسمی",
+    role: "مدیرعامل کوانتوم",
   },
   {
-    text: "Its robust features and quick support have transformed our workflow significantly.",
+    text: "ویژگی‌های قدرتمند و پشتیبانی سریع، جریان کاری ما را به طرز چشمگیری متحول کرده است.",
     image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&h=150&fit=crop&crop=face",
-    name: "Lisa Thompson",
-    role: "Project Manager",
+    name: "لیلا طاهری",
+    role: "مدیر پروژه",
   },
   {
-    text: "The smooth implementation exceeded expectations. It streamlined our entire business process.",
+    text: "پیاده‌سازی روان فراتر از انتظارات بود. کل فرآیند کسب‌وکار ما را ساده‌تر کرد.",
     image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&h=150&fit=crop&crop=face",
-    name: "Michael Brown",
-    role: "Business Analyst",
+    name: "محمد ابراهیمی",
+    role: "تحلیلگر کسب‌وکار",
   },
   {
-    text: "Our team productivity improved dramatically with the user-friendly design and powerful features.",
+    text: "بهره‌وری تیم ما با طراحی کاربرپسند و ویژگی‌های قدرتمند به طرز شگفت‌آوری بهبود یافت.",
     image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
-    name: "Rachel Kim",
-    role: "Marketing Director",
+    name: "راضیه کرمی",
+    role: "مدیر مارکتینگ",
   },
 ]
 
@@ -64,7 +64,7 @@ const firstColumn = testimonials.slice(0, 3)
 const secondColumn = testimonials.slice(3, 6)
 const thirdColumn = testimonials.slice(6, 9)
 
-const logos = ["TechCorp", "Innovate", "NextGen", "Quantum", "Velocity", "Apex"]
+const logos = ["نوین‌تک", "ایده‌پرداز", "نسل‌نو", "کوانتوم", "شتاب", "اوج"]
 
 export function TestimonialsSection() {
   return (
@@ -77,13 +77,12 @@ export function TestimonialsSection() {
           viewport={{ once: true }}
           className="flex flex-col items-center justify-center max-w-xl mx-auto mb-12"
         >
-          <div className="border border-zinc-800 py-1.5 px-4 rounded-full text-sm text-zinc-400">Testimonials</div>
-
+          <div className="border border-zinc-800 py-1.5 px-4 rounded-full text-sm text-zinc-400">نظرات کاربران</div>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-zinc-100 mt-6 text-center tracking-tight">
-            What our users say
+            آنچه کاربران ما می‌گویند
           </h2>
           <p className="text-center mt-4 text-zinc-500 text-lg text-balance">
-            See what our customers have to say about us.
+            ببینید مشتریان ما در مورد تجربه کار با ما چه می‌گویند.
           </p>
         </motion.div>
 
@@ -94,12 +93,12 @@ export function TestimonialsSection() {
         </div>
 
         <div className="mt-16 pt-16 border-t border-zinc-800/50">
-          <p className="text-center text-sm text-zinc-500 mb-8">Trusted by industry leaders</p>
+          <p className="text-center text-sm text-zinc-500 mb-8">مورد اعتماد پیشروان صنعت</p>
           <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_20%,black_80%,transparent)]">
             <motion.div
               className="flex gap-12 md:gap-16"
               animate={{
-                x: ["0%", "-50%"],
+                x: ["0%", "50%"],
               }}
               transition={{
                 x: {
