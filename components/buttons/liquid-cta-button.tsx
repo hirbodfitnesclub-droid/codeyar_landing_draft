@@ -36,7 +36,7 @@ export function LiquidCtaButton({ children, className, onClick, theme = "dark" }
             </span>
             <ArrowRight
               className={cn(
-                "w-5 h-5 group-hover:translate-x-1 transition-all duration-300",
+                "w-5 h-5 group-hover:translate-x-1 transition-all duration-300 rtl:rotate-180 rtl:group-hover:-translate-x-1",
                 isLight ? "text-zinc-600" : "text-zinc-200",
               )}
             />

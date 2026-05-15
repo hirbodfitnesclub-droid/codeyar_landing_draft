@@ -1,19 +1,21 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Manrope } from "next/font/google"
+import { Vazirmatn } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { LenisProvider } from "@/components/providers/lenis-provider"
+import { cn } from "@/lib/utils"
 import "./globals.css"
 
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-manrope",
+const vazirmatn = Vazirmatn({
+  subsets: ["arabic"],
+  variable: "--font-vazir",
+  display: "swap",
 })
 
 export const metadata: Metadata = {
-  title: "Liquid Metal Buttons | Premium UI Components",
+  title: "دکمه‌های متالیک مایع | کامپوننت‌های پیشرفته UI",
   description:
-    "A collection of premium button components featuring animated liquid metal borders powered by Paper Shaders.",
+    "مجموعه‌ای از دکمه‌های پرمیوم با حاشیه‌های متالیک متحرک، قدرت گرفته از Paper Shaders.",
   generator: "v0.app",
   icons: {
     icon: [
@@ -40,14 +42,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Instrument+Sans:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className={`${manrope.variable} font-sans antialiased bg-zinc-950 text-zinc-100`}>
+    <html lang="fa" dir="rtl" className={cn("dark", vazirmatn.variable)}>
+      <head />
+      <body className="font-sans antialiased bg-zinc-950 text-zinc-100">
         <LenisProvider>{children}</LenisProvider>
         <Analytics />
       </body>
