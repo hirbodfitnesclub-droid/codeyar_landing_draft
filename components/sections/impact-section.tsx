@@ -1,8 +1,8 @@
 const metrics = [
-  { value: "99.99%", label: "Uptime SLA", description: "Enterprise reliability" },
-  { value: "10M+", label: "API Requests/Day", description: "Proven at scale" },
-  { value: "<50ms", label: "Avg Response", description: "Blazing fast" },
-  { value: "150+", label: "Countries", description: "Global reach" },
+  { value: "۹۹٫۹۹٪", label: "تضمین در دسترس بودن", description: "قابلیت اطمینان سازمانی" },
+  { value: "۱۰میلیون+", label: "درخواست API در روز", description: "اثبات شده در مقیاس بالا" },
+  { value: "<۵۰میلی‌ثانیه", label: "میانگین پاسخ", description: "سرعت خیره‌کننده" },
+  { value: "۱۵۰+", label: "کشور", description: "دسترسی جهانی" },
 ]
 
 export function ImpactSection() {
@@ -11,10 +11,10 @@ export function ImpactSection() {
       <div className="max-w-5xl mx-auto">
         {/* Impact Section Header */}
         <div className="text-center mb-12">
-          <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">Our Impact</p>
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-zinc-100 mb-4">Trusted by teams worldwide</h2>
+          <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">دستاوردهای ما</p>
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-zinc-100 mb-4">مورد اعتماد تیم‌ها در سراسر جهان</h2>
           <p className="text-zinc-500 max-w-lg mx-auto text-balance">
-            Numbers that speak for themselves. See why thousands choose us.
+            اعدادی که به جای ما سخن می‌گویند. ببینید چرا هزاران نفر ما را انتخاب می‌کنند.
           </p>
         </div>
 

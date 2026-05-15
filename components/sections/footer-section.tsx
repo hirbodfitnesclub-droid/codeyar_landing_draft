@@ -3,21 +3,21 @@ import { Github, Twitter, Linkedin } from "lucide-react"
 
 const footerLinks = {
   product: [
-    { label: "Features", href: "#features" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "Changelog", href: "#" },
-    { label: "Documentation", href: "#" },
+    { label: "امکانات", href: "#features" },
+    { label: "قیمت‌گذاری", href: "#pricing" },
+    { label: "تغییرات", href: "#" },
+    { label: "مستندات", href: "#" },
   ],
   company: [
-    { label: "About", href: "#" },
-    { label: "Blog", href: "#" },
-    { label: "Careers", href: "#" },
-    { label: "Contact", href: "#" },
+    { label: "درباره ما", href: "#" },
+    { label: "بلاگ", href: "#" },
+    { label: "فرصت‌های شغلی", href: "#" },
+    { label: "تماس با ما", href: "#" },
   ],
   legal: [
-    { label: "Privacy", href: "#" },
-    { label: "Terms", href: "#" },
-    { label: "Security", href: "#" },
+    { label: "حریم خصوصی", href: "#" },
+    { label: "قوانین و مقررات", href: "#" },
+    { label: "امنیت", href: "#" },
   ],
 }
 
@@ -29,16 +29,16 @@ export function FooterSection() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="font-display text-xl font-semibold text-zinc-100">
-              Acme
+              آکمی
             </Link>
             <p className="mt-4 text-sm text-zinc-500 max-w-xs">
-              Build faster, ship smarter. The platform for modern teams.
+              سریع‌تر بسازید، هوشمندانه‌تر منتشر کنید. پلتفرم برای تیم‌های مدرن.
             </p>
           </div>
 
           {/* Product Links */}
           <div>
-            <h4 className="font-heading text-sm font-semibold text-zinc-100 mb-4">Product</h4>
+            <h4 className="font-heading text-sm font-semibold text-zinc-100 mb-4">محصول</h4>
             <ul className="space-y-3">
               {footerLinks.product.map((link) => (
                 <li key={link.label}>
@@ -52,7 +52,7 @@ export function FooterSection() {
 
           {/* Company Links */}
           <div>
-            <h4 className="font-heading text-sm font-semibold text-zinc-100 mb-4">Company</h4>
+            <h4 className="font-heading text-sm font-semibold text-zinc-100 mb-4">شرکت</h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
@@ -66,7 +66,7 @@ export function FooterSection() {
 
           {/* Legal Links */}
           <div>
-            <h4 className="font-heading text-sm font-semibold text-zinc-100 mb-4">Legal</h4>
+            <h4 className="font-heading text-sm font-semibold text-zinc-100 mb-4">حقوقی</h4>
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.label}>
@@ -81,7 +81,7 @@ export function FooterSection() {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-zinc-600">© {new Date().getFullYear()} Acme Inc. All rights reserved.</p>
+          <p className="text-sm text-zinc-600">© {new Date().getFullYear().toLocaleString('fa-IR', {useGrouping: false})} آکمی. تمامی حقوق محفوظ است.</p>
           <div className="flex items-center gap-4">
             <Link href="#" className="text-zinc-500 hover:text-zinc-300 transition-colors" aria-label="GitHub">
               <Github className="w-5 h-5" />
