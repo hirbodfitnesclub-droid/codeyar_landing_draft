@@ -1,235 +1,161 @@
-# tasks.md — نقشه راه اجرا
+# tasks.md — نقشه راه بازطراحی هیرو سکشن (نسخه ۲)
 
-تسک‌ها به ترتیب اجرا می‌شوند. تسک‌های با شماره یکسان (مثلاً ۴.۱ و ۴.۲) روی فایل‌های متفاوت کار می‌کنند و می‌توانند موازی اجرا شوند. سایر تسک‌ها باید **متوالی** اجرا شوند چون به وضعیت قبلی وابسته‌اند یا روی فایل‌های مشترک کار می‌کنند.
-
----
-
-## TASK 1 — راه‌اندازی RTL در ریشه برنامه
-
-**راهنمای پیاده‌سازی فنی:**
-1. در `app/layout.tsx`:
-   - import کردن `Vazirmatn` از `next/font/google` با subset `arabic` و variable `--font-sans`.
-   - حذف فونت‌های انگلیسی فعلی (Manrope, Cal Sans, Instrument Sans) از import و className.
-   - تنظیم `<html lang="fa" dir="rtl" className={cn("dark", vazirmatn.variable)}>`.
-   - بروزرسانی `<title>` و `<meta description>` به فارسی.
-2. بدنه فایل (children, providers) دست‌نخورده باقی بماند.
-
-**محدودیت‌های اختصاصی تسک:**
-- **انجام بده:** فقط ویرایش `app/layout.tsx`.
-- **انجام نده:** هیچ فایل دیگری را در این تسک تغییر نده. فونت لوکال یا فایل woff اضافه نکن.
-
-**CONTEXT_FILES:** `["app/layout.tsx"]`
+> **قانون طلایی:** تسک‌ها متوالی هستند. هیچ دو تسکی که روی یک فایل Write دارند موازی اجرا نمی‌شوند.
 
 ---
 
-## TASK 2 — تنظیم استایل سراسری برای RTL و فونت فارسی
+## تسک ۱: کامپوننت جداگانه TaskProgressCard
 
-**راهنمای پیاده‌سازی فنی:**
-1. در `app/globals.css`:
-   - مقدار `--font-sans` و `--font-serif` و `--font-heading` را به `var(--font-sans), system-ui, sans-serif` تغییر بده تا از Vazirmatn استفاده کند.
-   - متغیر `--font-mono` را روی Geist Mono حفظ کن.
-   - در selector `body` یا `:root`، property های مربوط به letter-spacing را برای فارسی بازتنظیم کن (مثلاً `letter-spacing: 0` چون فارسی نباید tracking داشته باشد).
-   - اطمینان حاصل کن که هیچ rule صریحی `direction: ltr` یا `text-align: left` ندارد. اگر وجود دارد، حذف یا اصلاح کن.
+### عنوان تسک
+ساخت کامپوننت `TaskProgressCard` در فایل مستقل
 
-**محدودیت‌های اختصاصی تسک:**
-- **انجام بده:** فقط ویرایش بخش‌های مرتبط با فونت و direction.
-- **انجام نده:** ساختار CSS variables رنگی (oklch) را تغییر نده. تم رنگی Dark Mode دست‌نخورده باقی بماند.
+### راهنمای پیاده‌سازی فنی
+1. **فایل جدید** `components/ui/task-progress-card.tsx` بساز.
+2. کامپوننت باید یک آرایه از تسک‌ها با این ساختار بپذیرد:
+   ```ts
+   type TaskItem = { id: number; label: string; status: 'done' | 'in-progress' | 'pending' }
+   ```
+3. **داده‌های پیش‌فرض** (hardcoded داخل کامپوننت):
+   - `طراحی رابط کاربری` → `done`
+   - `نوشتن کد فرانت‌اند` → `in-progress`
+   - `نوشتن کد بک‌اند` → `pending`
+   - `تهیه مستندات` → `pending`
+4. **طراحی بصری هر آیتم** — سه وضعیت کاملاً متمایز:
+   - **`done`**: نوار کنار‌چپ سبز (`border-l-2 border-green-500`), آیکون تیک سبز, متن `line-through opacity-50`, یک badge کوچک با متن `انجام شد` و `bg-green-500/10 text-green-400`.
+   - **`in-progress`**: کارت با `bg-violet-500/10 border border-violet-500/30 shadow-[inset_0_0_20px_rgba(139,92,246,0.12)]`, یک اسپینر دایره‌ای animated با `border-violet-400 border-t-transparent animate-spin` (نه Framer Motion), متن روشن `text-zinc-100`, یک badge `در حال انجام` با پالس: `bg-violet-500/20 text-violet-300` و نقطه درخشان بنفش کنارش.
+   - **`pending`**: `bg-zinc-900/30 border border-zinc-800/50`, آیکون `...` یا `Clock`, متن `text-zinc-500`, badge `در انتظار` با `bg-zinc-800 text-zinc-500`.
+5. **انیمیشن ورود**: هر آیتم با `motion.div` و `initial={{ opacity: 0, x: -10 }}` و `animate={{ opacity: 1, x: 0 }}` با `delay: index * 0.12` وارد شود.
+6. **wrapper کارت** کلی: `backdrop-blur-xl bg-zinc-950/80 border border-zinc-800 rounded-xl p-5 shadow-[0_0_40px_rgba(139,92,246,0.15)] flex flex-col gap-3`
 
-**CONTEXT_FILES:** `["app/globals.css", "app/layout.tsx"]`
+### محدودیت‌های این تسک
+- **باید:** این فایل کاملاً مستقل باشد و هیچ import از `hero-section.tsx` نداشته باشد.
+- **باید:** از `framer-motion` برای انیمیشن ورود آیتم‌ها استفاده شود.
+- **باید:** اسپینر `in-progress` با CSS `animate-spin` باشد — نه Framer Motion.
+- **نباید:** هیچ state یا منطق خارجی دریافت کند — تمام داده‌ها داخلی است.
+- **نباید:** از inline style استفاده شود.
 
----
-
-## TASK 3 — فارسی‌سازی و راست‌چین کردن Navbar
-
-**راهنمای پیاده‌سازی فنی:**
-1. در `components/ui/navbar.tsx`:
-   - متن لینک‌های منو را ترجمه کن: `Features → امکانات`, `Testimonials → نظرات کاربران`, `Pricing → قیمت‌گذاری`.
-   - دکمه `Get Started → شروع کنید`.
-   - تمام کلاس‌های `ml-*` به `ms-*` و `mr-*` به `me-*` تبدیل شوند.
-   - اگر لوگو/برند با فاصله‌ای از سمت چپ بود، فاصله را به سمت start (راست در RTL) منتقل کن.
-   - اگر آیکون منوی موبایل وجود دارد، position آن بررسی شود (در RTL باید سمت چپ بنشیند، که با logical properties خود به خود انجام می‌شود).
-
-**محدودیت‌های اختصاصی تسک:**
-- **انجام بده:** فقط تغییر متن و کلاس‌های جهتی.
-- **انجام نده:** ساختار JSX، breakpoint ها، یا انیمیشن‌های موجود را تغییر نده.
-
-**CONTEXT_FILES:** `["components/ui/navbar.tsx"]`
-
----
-
-## TASK 4 — فارسی‌سازی Hero Section
-
-**راهنمای پیاده‌سازی فنی:**
-1. در `components/sections/hero-section.tsx`:
-   - تمام متن‌های انگلیسی به فارسی بومی‌سازی شوند:
-     - Badge: `Introducing v2.0 — Now with AI` → `معرفی نسخه ۲.۰ — اکنون با هوش مصنوعی`
-     - Headline: `Build faster. Ship smarter.` → `سریع‌تر بساز. هوشمندانه‌تر منتشر کن.`
-     - Description: ترجمه‌ی روان و بومی.
-     - CTA primary: `Start Free Trial` → `شروع رایگان`
-     - CTA secondary: `See how it works` → `نحوه کارکرد را ببینید`
-     - Trust line: `Trusted by 10,000+ developers` → `مورد اعتماد بیش از ۱۰٬۰۰۰ توسعه‌دهنده`
-   - اعداد لاتین به فارسی: `5.0` → `۵٫۰`، `10,000+` → `۱۰٬۰۰۰+`.
-   - کلاس‌های جهتی: `ml-*` → `ms-*`, `-space-x-3` → `-space-x-reverse -space-x-3` (یا حذف space و استفاده از gap).
-   - آیکون فلش CTA: افزودن کلاس `rtl:rotate-180` (یا از کامپوننت liquid-cta-button استفاده شده که در تسک ۱۰ اصلاح می‌شود).
-
-**محدودیت‌های اختصاصی تسک:**
-- **انجام بده:** ترجمه + اعداد فارسی + تبدیل کلاس‌های جهتی.
-- **انجام نده:** ساختار grid، sizing، یا انیمیشن‌های entrance را تغییر نده. تصویر hero را تغییر نده.
-
-**CONTEXT_FILES:** `["components/sections/hero-section.tsx", "components/buttons/liquid-cta-button.tsx"]`
+```
+CONTEXT_FILES: ["app/globals.css", "app/layout.tsx"]
+```
 
 ---
 
-## TASK 5 — فارسی‌سازی Impact Section
+## تسک ۲: بازطراحی چیدمان هیرو — Asymmetric Void Layout
 
-**راهنمای پیاده‌سازی فنی:**
-1. در `components/sections/impact-section.tsx`:
-   - عنوان: `Our Impact` → `دستاوردهای ما`
-   - زیرعنوان: `Trusted by teams worldwide` → `مورد اعتماد تیم‌ها در سراسر جهان`
-   - چهار آمار:
-     - `99.99% Uptime SLA` → `۹۹٫۹۹٪ تضمین در دسترس بودن`
-     - `10M+ API Requests/Day` → `بیش از ۱۰ میلیون درخواست API در روز`
-     - `<50ms Avg Response` → `کمتر از ۵۰ میلی‌ثانیه میانگین پاسخ`
-     - `150+ Countries` → `۱۵۰+ کشور`
-   - اعداد در همه‌جا فارسی شوند.
+### عنوان تسک
+تبدیل چیدمان از `flex-col center` به `grid` دو‌ستونه نامتقارن (40% متن | 60% ماکت)
 
-**محدودیت‌های اختصاصی تسک:**
-- **انجام بده:** فقط متن و اعداد.
-- **انجام نده:** layout grid را تغییر نده.
+### راهنمای پیاده‌سازی فنی
+1. **`hero-section.tsx` را بازنویسی کن** — چیدمان کلی از `flex-col items-center` به `grid grid-cols-[40%_60%]` تغییر کند.
+2. **ستون راست (40%) — The Anchor**:
+   - `flex flex-col justify-center gap-8 pr-8 lg:pr-16`
+   - Badge اعلان (از نسخه فعلی حفظ شود)
+   - Headline با `text-5xl lg:text-6xl font-bold leading-[1.1]` (tight leading)
+   - نئون‌گلو روی هدلاین: `drop-shadow-[0_0_20px_rgba(139,92,246,0.4)]` روی span رنگی
+   - Subheadline با `text-zinc-400 text-base lg:text-lg leading-relaxed`
+   - دکمه‌های CTA (`flex-col sm:flex-row gap-4 mt-2`)
+   - Social Proof دقیقاً همانطور که در نسخه فعلی است (آواتارها + ستاره‌ها) — بدون هیچ تغییری
+3. **ستون چپ (60%) — The Reality Warp**:
+   - ماکت IDE با `scale(0.9)` یا `max-w-[95%]` کوچک‌شده
+   - `h-[580px]` برای ارتفاع ماکت
+4. **The Void Backdrop** (نور مرزی):
+   - یک `div` با `absolute`, `top-0`, `bottom-0`, `w-px` در مرز 40%/60% قرار گیرد.
+   - این div یک `box-shadow: 0 0 80px 40px rgba(139,92,246,0.15)` داشته باشد (از Tailwind: `shadow-[0_0_80px_40px_rgba(139,92,246,0.15)]`)
+   - یک background blur دایره‌ای بزرگ (`w-96 h-[800px] bg-purple-600/10 blur-[120px]`) دقیقاً روی این مرز
+5. **Responsive fallback**: در `md:` و پایین‌تر، به `flex flex-col` برگرد (ستون‌ها عمودی شوند، ماکت زیر متن قرار گیرد).
 
-**CONTEXT_FILES:** `["components/sections/impact-section.tsx"]`
+### محدودیت‌های این تسک
+- **باید:** Social Proof و دکمه‌ها دست‌نخورده باقی بمانند (مقادیر، classNameها، تصاویر).
+- **باید:** `LiquidCtaButton` و `Button` بدون هیچ تغییر prop اضافه‌ای استفاده شوند.
+- **باید:** در موبایل (زیر `md:`) چیدمان عمودی باشد.
+- **نباید:** متن هدلاین و ساب‌هدلاین تغییر کند.
+- **نباید:** از inline style برای grid استفاده شود — از Tailwind arbitrary values استفاده کن (`grid-cols-[40%_60%]`).
 
----
-
-## TASK 6 — فارسی‌سازی Features Section
-
-**راهنمای پیاده‌سازی فنی:**
-1. در `components/sections/features-section.tsx`:
-   - عنوان سکشن: `Everything you need to succeed` → `هر آن‌چه برای موفقیت نیاز دارید`
-   - عناوین ۴ feature card:
-     - `Real-time Dashboard` → `داشبورد بلادرنگ`
-     - `Blazing Fast` → `سرعت خیره‌کننده`
-     - `Keyboard First` → `کیبورد در اولویت`
-     - `100+ Integrations` → `بیش از ۱۰۰ یکپارچه‌سازی`
-   - توضیحات هر کارت ترجمه روان.
-   - مقادیر mockup داشبورد (مثل `12.4K`، `$48.2K`): به فارسی تبدیل شوند یا اگر در تصویر داخل دشبورد هستند، بدون تغییر بمانند.
-   - کلاس‌های `ml-1` → `ms-1`.
-
-**محدودیت‌های اختصاصی تسک:**
-- **انجام بده:** ترجمه + اعداد + کلاس‌های جهتی.
-- **انجام نده:** chart ها یا mock UI پیچیده داخل کارت‌ها را بازنویسی نکن؛ فقط متن‌های روی آن‌ها را فارسی کن.
-
-**CONTEXT_FILES:** `["components/sections/features-section.tsx"]`
+```
+CONTEXT_FILES: ["components/sections/hero-section.tsx", "components/buttons/liquid-cta-button.tsx", "components/ui/button.tsx", "app/globals.css"]
+```
 
 ---
 
-## TASK 7 — فارسی‌سازی Testimonials Section (شامل اصلاح Marquee)
+## تسک ۳: اصلاح State Machine — Loop بی‌نهایت و باگ‌فیکس
 
-**راهنمای پیاده‌سازی فنی:**
-1. در `components/sections/testimonials-section.tsx`:
-   - عنوان سکشن و توضیحات به فارسی.
-   - تمام ۹ نظر کاربر را با **محتوای کاملاً بومی** بازنویسی کن (نه ترجمه ماشینی):
-     - نام‌ها: نام‌های ایرانی واقعی (مثلاً «سارا محمدی»، «امیر رضایی»).
-     - سمت‌ها: «مدیر فنی»، «بنیان‌گذار»، «توسعه‌دهنده ارشد» و...
-     - شرکت‌ها: می‌توانند fictional ایرانی باشند.
-     - متن نظرات: کوتاه، طبیعی و باورپذیر به زبان فارسی محاوره‌ای-رسمی.
-2. در `components/ui/testimonials-column.tsx`:
-   - بررسی `motion.div` با `animate={{ y: [...] }}` یا `x: [...]`. اگر marquee افقی است، جهت `x` معکوس شود تا حس طبیعی RTL داشته باشد.
-   - اگر marquee عمودی (`y`) است، تغییری نیاز ندارد.
+### عنوان تسک
+پیاده‌سازی loop بی‌نهایت انیمیشن، اصلاح code stream و ادغام TaskProgressCard
 
-**محدودیت‌های اختصاصی تسک:**
-- **انجام بده:** بومی‌سازی محتوایی + اصلاح direction انیمیشن.
-- **انجام نده:** تعداد ستون‌ها یا تعداد تستیمونیال‌ها را تغییر نده. کلاس‌های blur/mask gradient را تغییر نده.
+### راهنمای پیاده‌سازی فنی
 
-**CONTEXT_FILES:** `["components/sections/testimonials-section.tsx", "components/ui/testimonials-column.tsx"]`
+#### الف) Loop بی‌نهایت State Machine
+State machine باید loop شود. بعد از رسیدن به `materialized`:
+1. **۳ ثانیه** در `materialized` بمان.
+2. State را به `resetting` تغییر بده (fade-out کوتاه).
+3. بعد از ۶۰۰ms، `displayedText` را پاک کن و state را به `idle` برگردان.
+4. بعد از ۸۰۰ms تأخیر جدید، دوباره از `typing` شروع کن.
 
----
+State کامل: `'idle' | 'typing' | 'contextLoaded' | 'splitting' | 'materialized' | 'resetting'`
 
-## TASK 8 — فارسی‌سازی Pricing Section
+منطق این کار با `useEffect` روی `phase` کنترل می‌شود — نه `setTimeout` تودرتو:
+```ts
+useEffect(() => {
+  if (phase === 'materialized') {
+    const t = setTimeout(() => setPhase('resetting'), 3000)
+    return () => clearTimeout(t)
+  }
+  if (phase === 'resetting') {
+    const t = setTimeout(() => { setDisplayedText(''); setPhase('idle') }, 600)
+    return () => clearTimeout(t)
+  }
+}, [phase])
+```
 
-**راهنمای پیاده‌سازی فنی:**
-1. در `components/sections/pricing-section.tsx`:
-   - عنوان: ترجمه و بومی‌سازی.
-   - نام پلن‌ها: `Starter → پایه`، `Pro → حرفه‌ای`، `Enterprise → سازمانی`.
-   - قیمت‌ها:
-     - `$0/mo` → `رایگان`
-     - `$29/mo` → `۲۹۰٬۰۰۰ تومان/ماه`
-     - `$99/mo` یا `Custom` → `۹۹۰٬۰۰۰ تومان/ماه` یا `سفارشی`
-   - تمام ویژگی‌های هر پلن (feature list) ترجمه روان.
-   - دکمه‌های CTA: ترجمه (`Get Started`, `Contact Sales` و...).
-   - badge «Most Popular» → «محبوب‌ترین».
-   - کلاس‌های جهتی Check icon در feature list: `mr-2` → `me-2` یا `ms-2` بسته به layout.
+#### ب) باگ‌فیکس: Context Glow روی context_memory
+مشکل: گلو سبز همیشه نمایش داده نمی‌شود یا روی المان اشتباه می‌افتد.
+- شرط نمایش را به `phase !== 'idle' && phase !== 'typing'` تغییر بده.
+- در فاز `resetting`، گلو باید با `opacity: 0` fade-out شود.
+- مطمئن شو `absolute left-2 dir="ltr"` روی container گلو است تا در RTL محیط جابجا نشود.
 
-**محدودیت‌های اختصاصی تسک:**
-- **انجام بده:** ترجمه + ارز تومانی + اعداد فارسی + کلاس‌های جهتی.
-- **انجام نده:** ساختار کارت‌های قیمت یا تعداد پلن‌ها را تغییر نده.
+#### ج) اصلاح Code Stream (بدون پرش)
+مشکل: انیمیشن `y: [0, -200]` یک پرش مرئی دارد وقتی reset می‌شود.
 
-**CONTEXT_FILES:** `["components/sections/pricing-section.tsx"]`
+راه‌حل:
+- ارتفاع محتوای درون motion.div باید دقیقاً دو برابر ارتفاع viewport پنل باشد.
+- `animate={{ y: [0, "-50%"] }}` به جای مقدار ثابت `-200`.
+- تعداد آیتم‌ها را دو برابر کن (40 عدد به جای 20)، اما فقط نصف اول منحصربه‌فرد باشند و نصف دوم کپی نصف اول باشد — این seamless loop را ممکن می‌کند.
+- `transition={{ repeat: Infinity, duration: 8, ease: 'linear', repeatType: 'loop' }}` — مهم: `repeatType: 'loop'` نه `reverse`.
 
----
+#### د) ادغام TaskProgressCard
+- `TaskProgressCard` را از `components/ui/task-progress-card.tsx` import کن.
+- در `LivePreviewPanel` به جای چک‌لیست قدیم، `<TaskProgressCard />` را render کن.
+- انیمیشن materialization (`scale: 0.5 → 1`) را روی wrapper `<TaskProgressCard />` نگه‌دار.
 
-## TASK 9 — فارسی‌سازی CTA Section
+### محدودیت‌های این تسک
+- **باید:** Loop بی‌نهایت و بدون هیچ memory leak (cleanup در useEffect) باشد.
+- **باید:** در فاز `resetting`، ماکت IDE کامل با `opacity: 0.3` یا یک fade به صورت نرم محو شود — نه ناگهانی.
+- **باید:** `TaskProgressCard` import شود — کد چک‌لیست قدیمی از `hero-section.tsx` حذف شود.
+- **نباید:** هیچ `setTimeout` تودرتو یا زنجیره‌ای بدون cleanup نوشته شود.
+- **نباید:** Code Stream در فاز `resetting` یا `idle` نمایش داده شود.
 
-**راهنمای پیاده‌سازی فنی:**
-1. در `components/sections/cta-section.tsx`:
-   - عنوان نهایی، توضیحات و دکمه CTA به فارسی.
-   - اطمینان از flip آیکون فلش (از طریق liquid-cta-button که در تسک ۱۰ اصلاح می‌شود).
-
-**محدودیت‌های اختصاصی تسک:**
-- **انجام بده:** فقط ترجمه.
-- **انجام نده:** افکت‌های بصری (gradient، shader) را تغییر نده.
-
-**CONTEXT_FILES:** `["components/sections/cta-section.tsx", "components/buttons/liquid-cta-button.tsx"]`
-
----
-
-## TASK 10 — اصلاح Liquid CTA Button برای RTL
-
-**راهنمای پیاده‌سازی فنی:**
-1. در `components/buttons/liquid-cta-button.tsx`:
-   - آیکون `ArrowRight` (یا هر آیکون جهت‌دار): اضافه کردن کلاس `rtl:rotate-180` یا `rtl:-scale-x-100`.
-   - اگر `translate-x-1` در hover animation دارد، به `rtl:-translate-x-1` تبدیل شود تا فلش در hover به سمت طبیعی (چپ در RTL) حرکت کند.
-   - متن دکمه‌ها از prop می‌آید، نیازی به ترجمه داخل خود کامپوننت نیست (در فراخوانی‌کننده‌ها ترجمه شده).
-
-**محدودیت‌های اختصاصی تسک:**
-- **انجام بده:** اصلاح جهت آیکون و انیمیشن hover.
-- **انجام نده:** افکت shader یا liquid metal background را تغییر نده.
-
-**CONTEXT_FILES:** `["components/buttons/liquid-cta-button.tsx"]`
+```
+CONTEXT_FILES: ["components/sections/hero-section.tsx", "components/ui/task-progress-card.tsx", "app/globals.css"]
+```
 
 ---
 
-## TASK 11 — فارسی‌سازی Footer Section
+## تسک ۴: دکمه‌های CTA و Social Proof — فینال سکشن (بدون تغییر)
 
-**راهنمای پیاده‌سازی فنی:**
-1. در `components/sections/footer-section.tsx`:
-   - عنوان ستون‌ها: `Product → محصول`، `Company → شرکت`، `Legal → قوانین`.
-   - تمام لینک‌های زیرمجموعه ترجمه شوند.
-   - copyright: `© 2025 ... All rights reserved.` → `© ۱۴۰۴ ... تمامی حقوق محفوظ است.`
-   - تبدیل کلاس‌های جهتی به logical properties.
-   - آیکون‌های شبکه اجتماعی: نیازی به flip ندارند.
+### عنوان تسک
+اطمینان از صحت دکمه‌ها و Social Proof در چیدمان جدید
 
-**محدودیت‌های اختصاصی تسک:**
-- **انجام بده:** ترجمه + اعداد + کلاس‌های جهتی.
-- **انجام نده:** ساختار grid فوتر یا تعداد ستون‌ها را تغییر نده.
+### راهنمای پیاده‌سازی فنی
+1. **تأیید** کن که `LiquidCtaButton` با متن `استارت خلق ایده 🚀` و link به `#pricing` است.
+2. **تأیید** کن که `Button variant="outline"` با `Eye` icon و متن `مشاهده نمونه خروجی‌ها` و link به `#features` است.
+3. **تأیید** کن که Social Proof (پنج آواتار + ستاره‌های زرد + متن) دقیقاً همانطور است.
+4. اگر در چیدمان جدید (40%) المانی misalign است، فقط `justify-start` یا `items-start` را تنظیم کن.
 
-**CONTEXT_FILES:** `["components/sections/footer-section.tsx"]`
+### محدودیت‌های این تسک
+- **نباید:** هیچ className، prop، یا محتوای دکمه‌ها تغییر کند.
+- **نباید:** Social Proof (تصاویر، متن، ستاره‌ها) تغییر کند.
+- **نباید:** فایلی غیر از `hero-section.tsx` دست‌کاری شود.
 
----
-
-## TASK 12 — بررسی نهایی و اعتبارسنجی (QA Sweep)
-
-**راهنمای پیاده‌سازی فنی:**
-1. تمام فایل‌های ویرایش‌شده را مجدداً Read کن.
-2. Grep برای patterns زیر در `components/` و `app/`:
-   - `text-left`, `text-right`, `ml-`, `mr-`, `pl-`, `pr-` — هر مورد باقی‌مانده‌ای را به logical equivalent تبدیل کن.
-   - متن‌های انگلیسی باقی‌مانده (regex `[A-Za-z]{4,}` در JSX). aria-label و alt هم بررسی شوند.
-   - اعداد لاتین (regex `\d`) — تنها در URL، className، و کد مجاز است؛ در text node JSX باید فارسی باشد.
-3. بررسی aria-label و alt تصاویر — همه باید فارسی باشند.
-4. بررسی meta tag های SEO در layout — title، description فارسی.
-
-**محدودیت‌های اختصاصی تسک:**
-- **انجام بده:** اصلاح هر چیزی که از تسک‌های قبلی جا مانده.
-- **انجام نده:** ریفکتور بزرگ، تغییر دیزاین، یا افزودن فیچر جدید.
-
-**CONTEXT_FILES:** `["app/layout.tsx", "app/globals.css", "app/page.tsx", "components/ui/navbar.tsx", "components/sections/hero-section.tsx", "components/sections/impact-section.tsx", "components/sections/features-section.tsx", "components/sections/testimonials-section.tsx", "components/sections/pricing-section.tsx", "components/sections/cta-section.tsx", "components/sections/footer-section.tsx", "components/buttons/liquid-cta-button.tsx", "components/ui/testimonials-column.tsx"]`
+```
+CONTEXT_FILES: ["components/sections/hero-section.tsx", "components/buttons/liquid-cta-button.tsx", "components/ui/button.tsx"]
+```
