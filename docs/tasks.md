@@ -99,8 +99,11 @@ CONTEXT_FILES: ["components/sections/hero-section.tsx", "app/globals.css"]
 ### محدودیت‌های این تسک
 - **باید:** تنها تغییر فایل `hero-section.tsx` باشد — هیچ فایل دیگری تغییر نکند.
 - **باید:** `LiquidCtaButton` و `Button` بدون تغییر در فایل‌های اصلی‌شان استفاده شوند.
+- **باید:** استایل، انیمیشن و ظاهر بصری `LiquidCtaButton` کاملاً دست‌نخورده بماند — تنها prop مجاز به تغییر `children` (متن) است. هیچ `className`، `variant`، یا prop دیگری اضافه یا حذف نشود.
+- **باید:** بخش Social Proof (آواتارهای تصویری اعضای جامعه وایب‌کدرها + ستاره‌های ریتینگ) دقیقاً از نسخه فعلی `hero-section.tsx` کپی شود — هیچ المان، متن، تصویر، یا className آن تغییر نکند.
 - **نباید:** متن هدلاین و ساب‌هدلاین تغییر کند — همان متن فارسی موجود حفظ شود.
-- **نباید:** بخش Social Proof حذف شود.
+- **نباید:** بخش Social Proof حذف، جابجا، یا ریاستایل شود.
+- **نباید:** `className`های موجود روی دکمه‌های `Button` (outline variant) تغییر کنند.
 
 ```
 CONTEXT_FILES: ["components/sections/hero-section.tsx", "components/buttons/liquid-cta-button.tsx", "components/ui/button.tsx"]
