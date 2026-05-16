@@ -1,4 +1,4 @@
-# ARCHITECTURE.md — لنگرگاه سیستمی کدیار
+# ARCHITECTURE.md — لنگرگاه سیستمی کدیار (نسخه ۲)
 
 ## وضعیت پروژه
 پروژه موجود است (نه Zero-to-One). فقط فایل‌های جدید یا ویرایش‌شده ذکر می‌شوند.
@@ -8,21 +8,22 @@
 ## منطق مسیردهی فایل‌ها
 
 ```
-app/                        ← Next.js App Router
+app/
   page.tsx                  ← orchestrator، فقط section‌ها را import می‌کند
   layout.tsx                ← تنظیمات Vazirmatn، dark mode فیکس، LenisProvider
-  globals.css               ← design tokens، no new vars needed برای این تسک
+  globals.css               ← design tokens
 
 components/
   sections/
-    hero-section.tsx        ← [ویرایش اصلی] — کل بازطراحی اینجاست
+    hero-section.tsx        ← [ویرایش اصلی] — چیدمان و state machine اینجاست
   buttons/
     liquid-cta-button.tsx   ← [فقط خواندن] — بدون تغییر
   ui/
+    task-progress-card.tsx  ← [فایل جدید] — کامپوننت مستقل کارت تسک‌ها
     liquid-metal-border.tsx ← [فقط خواندن] — بدون تغییر
-    button.tsx              ← [فقط خواندن] — برای دکمه ghost استفاده می‌شود
+    button.tsx              ← [فقط خواندن] — برای دکمه outline استفاده می‌شود
 
-docs/                       ← مغز پروژه (این فایل‌ها)
+docs/
   PROJECT.md
   ARCHITECTURE.md
   tasks.md
@@ -31,55 +32,120 @@ docs/                       ← مغز پروژه (این فایل‌ها)
 
 ---
 
-## معماری ماکت IDE در هیرو سکشن
-
-این ماکت یک UI مصنوعی است (هیچ بک‌اند واقعی ندارد). تمام state توسط `useState` و `useEffect` کنترل می‌شود.
-
-### جریان انیمیشن (State Machine)
+## چیدمان کلی هیرو سکشن — Asymmetric Void
 
 ```
-idle → typing → contextLoaded → splitting → materialized
+┌─────────────────────────────────────────────────────────────┐
+│  section (bg-zinc-950, min-h-screen, grid md:grid-cols-2)  │
+│                                                             │
+│  ┌─────────────── 40% ──────────────┐  ┌───── 60% ──────┐  │
+│  │  [The Anchor — Right Column]      │  │ [Reality Warp] │  │
+│  │                                   │  │                │  │
+│  │  Badge اعلان                      │  │  ماکت IDE      │  │
+│  │  Headline (tight leading + neon)  │  │  (scale 0.9,   │  │
+│  │  Subheadline                      │  │   h-580px)     │  │
+│  │  CTAs (Liquid + Outline)          │  │                │  │
+│  │  Social Proof (avatars + stars)   │  │                │  │
+│  │                                   │  │                │  │
+│  └───────────────────────────────────┘  └────────────────┘  │
+│                    ↑                                         │
+│          Void Glow (بنفش، روی مرز 40/60)                   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Responsive**: زیر `md:` به `flex-col` تبدیل می‌شود (ماکت زیر متن).
+
+---
+
+## معماری State Machine — Loop بی‌نهایت
+
+```
+idle → typing → contextLoaded → splitting → materialized → resetting → idle → ...
 ```
 
 | مرحله | توضیح | تریگر |
 |---|---|---|
-| `idle` | ماکت نمایش داده می‌شود، هنوز تایپ شروع نشده | on mount |
-| `typing` | کاراکتر به کاراکتر متن تایپ می‌شود | 800ms بعد از mount |
-| `contextLoaded` | نقطه سبز Glow و تگ "Context Loaded" ظاهر می‌شوند | 1s بعد از اتمام تایپ |
-| `splitting` | پنل راست دو نیم می‌شود | 600ms بعد از contextLoaded |
-| `materialized` | کارت تسک منیجر با spring از ۰.۵ به ۱ scale می‌شود | 400ms بعد از splitting |
+| `idle` | ماکت نمایش داده می‌شود، cursor چشمک می‌زند | on mount / بعد از resetting |
+| `typing` | کاراکتر به کاراکتر متن تایپ می‌شود | 800ms بعد از idle |
+| `contextLoaded` | نقطه سبز Glow + تگ "Context Loaded" | بعد از اتمام تایپ |
+| `splitting` | پنل به Code Stream + Live Preview تقسیم می‌شود | 600ms بعد از contextLoaded |
+| `materialized` | TaskProgressCard با spring ظاهر می‌شود | 400ms بعد از splitting |
+| `resetting` | fade-out نرم، پاک کردن متن | 3000ms بعد از materialized |
 
-### ساختار کامپوننت‌ها (همه درون `hero-section.tsx`)
+**قانون مهم:** loop در `resetting` دوباره به `idle` برمی‌گردد. این loop بی‌نهایت است.
+
+---
+
+## ساختار کامپوننت‌ها
 
 ```
 HeroSection (section wrapper)
-├── Badge (announcement chip)
-├── Headline + Subheadline
-├── IDEMockup
-│   ├── IDETitleBar (traffic lights + عنوان)
-│   ├── IDESidebar (file tree + context_memory folder)
-│   │   └── ContextMemoryGlow (نقطه سبز + "Context Loaded" tag)
-│   └── IDEMain
-│       ├── [pre-split] PromptPanel (textarea با typewriter)
-│       └── [post-split] SplitView
-│           ├── CodeStreamPanel (خطوط کد متحرک)
-│           └── LivePreviewPanel (TaskManager card)
-└── CTAButtons
-    ├── LiquidCtaButton ("استارت خلق ایده 🚀")
-    └── Button ghost ("مشاهده نمونه خروجی‌ها")
+├── VoidGlow (div مطلق روی مرز 40/60 — فقط desktop)
+├── AnchorColumn (ستون راست 40%)
+│   ├── Badge
+│   ├── Headline + Subheadline
+│   ├── CTAButtons
+│   │   ├── LiquidCtaButton
+│   │   └── Button (outline)
+│   └── SocialProof (آواتارها + ستاره‌ها — دست‌نخورده)
+└── RealityWarpColumn (ستون چپ 60%)
+    └── IDEMockup
+        ├── IDETitleBar
+        ├── IDESidebar (file tree + context_memory)
+        │   └── ContextMemoryGlow (شرط: phase !== 'idle' && phase !== 'typing')
+        └── IDEMain
+            ├── [pre-split] PromptPanel
+            └── [post-split: splitting/materialized] SplitView
+                ├── CodeStreamPanel (seamless loop با "-50%" y)
+                └── LivePreviewPanel → <TaskProgressCard />
 ```
 
 ---
 
-## دیتابیس
-این پروژه لندینگ‌پیج است؛ هیچ دیتابیسی ندارد و نیازی ندارد.
+## مشخصات فنی کامپوننت TaskProgressCard
+
+**مسیر فایل:** `components/ui/task-progress-card.tsx`
+
+```ts
+type TaskStatus = 'done' | 'in-progress' | 'pending'
+type TaskItem = { id: number; label: string; status: TaskStatus }
+```
+
+**داده‌های داخلی (hardcoded):**
+```ts
+const tasks: TaskItem[] = [
+  { id: 1, label: 'طراحی رابط کاربری', status: 'done' },
+  { id: 2, label: 'نوشتن کد فرانت‌اند', status: 'in-progress' },
+  { id: 3, label: 'نوشتن کد بک‌اند', status: 'pending' },
+  { id: 4, label: 'تهیه مستندات', status: 'pending' },
+]
+```
+
+**استایل هر وضعیت:**
+- `done`: نوار سبز چپ, تیک سبز, متن line-through, badge `انجام شد`
+- `in-progress`: کارت violet با glow داخلی, اسپینر CSS, badge `در حال انجام` + نقطه pulse
+- `pending`: کارت تیره, clock icon, متن خاکستری, badge `در انتظار`
+
+---
+
+## مشخصات فنی Code Stream (بدون پرش)
+
+```ts
+// ✅ درست — seamless loop
+animate={{ y: [0, "-50%"] }}
+transition={{ repeat: Infinity, duration: 8, ease: 'linear', repeatType: 'loop' }}
+
+// محتوا: 40 آیتم (20 منحصربه‌فرد + 20 کپی)
+// این باعث می‌شود وقتی به "-50%" می‌رسد، دقیقاً همان تصویر اول را می‌بینیم
+```
 
 ---
 
 ## نکات فنی حیاتی
 
-1. **RTL**: تمام انیمیشن‌های X-axis باید برای RTL معکوس شوند (مثلاً `x: -20` به جای `x: 20` برای ورود از راست).
-2. **Performance**: `will-change: transform` فقط روی المان‌هایی که واقعاً animate می‌شوند اعمال شود.
-3. **Overflow**: کانتینر IDEMockup باید `overflow-hidden` داشته باشد تا split animation کلیپ شود.
-4. **Delay صبور**: انیمیشن‌های مرحله‌ای با `delay` درون `transition` کنترل می‌شوند، نه `setTimeout`.
-5. **framer-motion فقط**: از `motion` package جداگانه import نکن؛ فقط از `framer-motion`.
+1. **RTL + گلو**: container نقطه سبز `context_memory` باید `dir="ltr"` داشته باشد تا گلو در چپ صفحه (نه راست) قرار گیرد.
+2. **Loop cleanup**: هر `setTimeout` در `useEffect` باید cleanup داشته باشد.
+3. **resetting phase**: در این فاز `displayedText` پاک می‌شود و ماکت IDE با `opacity: 0.4` fade می‌شود.
+4. **Performance**: `will-change: transform` فقط روی `motion.div` code stream.
+5. **Glow condition**: `phase !== 'idle' && phase !== 'typing'` (نه آرایه‌ای از حالت‌ها — این خواناتر و bug-proof‌تر است).
+6. **موبایل**: در `md:` و پایین‌تر، grid به `flex flex-col` تبدیل می‌شود. Void Glow فقط desktop نمایش داشته باشد.

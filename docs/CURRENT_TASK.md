@@ -1,26 +1,35 @@
-# CURRENT_TASK.md
+# CURRENT_TASK.md — نشانگر وضعیت
 
-## تسک فعال: تسک ۱
-**ساختار پایه ماکت IDE شیشه‌ای با انیمیشن تایپ‌رایتر**
+## تسک فعال: تسک ۱ از ۴
 
-### وضعیت
-- [ ] تسک ۱: ساختار پایه IDE و تایپ‌رایتر ← **فعال**
-- [ ] تسک ۲: Framer Motion — Context Glow و Split View
-- [ ] تسک ۳: دکمه‌های CTA و Social Proof
+**عنوان:** ساخت کامپوننت `TaskProgressCard` در فایل مستقل
 
-### فایل‌هایی که باید تغییر کنند
-- `components/sections/hero-section.tsx` ← بازنویسی کامل
+---
 
-### فایل‌های کانتکست (فقط خواندن)
-```json
-CONTEXT_FILES: ["components/sections/hero-section.tsx", "components/buttons/liquid-cta-button.tsx", "app/globals.css", "app/layout.tsx"]
+## چک‌لیست اجرایی
+
+- [ ] فایل `components/ui/task-progress-card.tsx` ساخته شود
+- [ ] آرایه چهار تسک با وضعیت‌های `done / in-progress / pending` تعریف شود
+- [ ] استایل سه وضعیت کاملاً متمایز پیاده‌سازی شود
+- [ ] انیمیشن ورود `x: -10 → 0` با stagger روی آیتم‌ها
+- [ ] اسپینر `in-progress` با CSS `animate-spin` (نه Framer Motion)
+- [ ] هیچ وابستگی به `hero-section.tsx` نداشته باشد
+
+---
+
+## تسک‌های بعدی (به ترتیب)
+
+1. ✅ **تسک ۱** — ساخت `TaskProgressCard` ← **فعال**
+2. ⏳ **تسک ۲** — بازطراحی چیدمان (Asymmetric Void Layout)
+3. ⏳ **تسک ۳** — اصلاح State Machine + Loop بی‌نهایت + باگ‌فیکس‌ها
+4. ⏳ **تسک ۴** — تأیید نهایی دکمه‌ها و Social Proof
+
+---
+
+## فایل‌های مجاز در این تسک
+
+```
+CONTEXT_FILES: ["app/globals.css", "app/layout.tsx"]
 ```
 
-### چک‌لیست تسک ۱
-- [ ] State machine با `useState`: `idle | typing | contextLoaded | splitting | materialized`
-- [ ] Title Bar با ترافیک‌لایت Mac OS
-- [ ] Sidebar با File Tree و `lib/context_memory/`
-- [ ] Prompt Panel با textarea ظاهری
-- [ ] انیمیشن تایپ‌رایتر کاراکتر به کاراکتر (۴۵ms/char)
-- [ ] تغییر state به `contextLoaded` بعد از اتمام تایپ
-- [ ] پنل راست فعلاً `hidden` باشد
+**فایل خروجی:** `components/ui/task-progress-card.tsx` (فایل جدید)
