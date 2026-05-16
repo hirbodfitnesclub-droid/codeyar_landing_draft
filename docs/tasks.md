@@ -213,75 +213,110 @@ CONTEXT_FILES: ["components/sections/hero-section.tsx"]
 ## تسک ۷: Responsive حرفه‌ای Hero Section (مهم‌ترین تسک)
 
 ### عنوان تسک
-بازنویسی کامل responsive برای جلوگیری از شکستگی در همه سایزها
+اصلاح responsive برای جلوگیری از شکستگی در همه سایزها — بدون تغییر ابعاد اصلی در دسکتاپ
+
+### ⚠️ قانون حیاتی
+**هیچ‌کدام از ابعاد اصلی (ارتفاع پنجره انیمیشن، سایز المان‌ها در حالت دسکتاپ بزرگ) نباید تغییر کند.** هدف این تسک فقط این است که در سایزهای کوچک‌تر، المان‌ها به‌درستی scale شوند یا مخفی شوند — نه اینکه طراحی اصلی عوض شود.
 
 ### راهنمای پیاده‌سازی فنی
 
-#### مرحله ۱: Section Container
-```tsx
-// قبلی:
-className="... lg:grid lg:grid-cols-[40%_60%] ..."
+#### مرحله ۱: Header (navbar) — جلوگیری از Overlap
+مشکل: در مانیتورهای کوچک، هدر روی Hero Section می‌افتد.
 
-// جدید:
-className="... flex flex-col lg:grid lg:grid-cols-[45%_55%] ..."
+**راه‌حل:**
+```tsx
+// در header یا navbar component:
+// مطمئن شو که header دارای position: fixed یا sticky است
+// و Hero Section دارای padding-top کافی است
+
+// در hero-section.tsx:
+// به section اصلی padding-top اضافه کن که با ارتفاع header هماهنگ باشد
+className="... pt-20 sm:pt-24 lg:pt-28 ..."
+// یا اگر header ارتفاع ثابت دارد:
+className="... pt-[80px] lg:pt-[100px] ..."
 ```
 
-#### مرحله ۲: Anchor Section (سمت راست/بالا)
+**همچنین بررسی کن:**
+- آیا header دارای `z-index` بالاتر از hero است؟ (باید باشد)
+- آیا hero از `mt-` منفی استفاده کرده که باعث overlap شده؟
+
+#### مرحله ۲: Section Container — بدون تغییر در lg و بالاتر
 ```tsx
-// اضافه کردن breakpoint های بیشتر:
-className="flex flex-col justify-center gap-4 sm:gap-5 lg:gap-6 
-           px-4 sm:px-6 lg:pr-10 
-           relative z-20 
-           mb-8 lg:mb-0 
+// فقط breakpoint های کوچک‌تر را اضافه کن:
+className="... 
+           flex flex-col          // موبایل: یک ستون
+           md:flex-row            // تبلت: دو ستون افقی
+           lg:grid lg:grid-cols-[40%_60%]  // دسکتاپ: همان قبلی — تغییر نده!
+           ..."
+```
+
+#### مرحله ۳: IDE Mockup — Scale کردن هوشمند (نه تغییر ارتفاع!)
+```tsx
+// ❌ اشتباه — ارتفاع را تغییر نده:
+h-[400px] sm:h-[450px] md:h-[500px] lg:h-[580px]  // این غلط است!
+
+// ✅ درست — از scale استفاده کن:
+className="w-full 
+           scale-[0.65] sm:scale-[0.75] md:scale-[0.85] lg:scale-100
+           origin-top
+           ..."
+
+// یا اگر scale مشکل‌ساز بود، از container query یا max-width استفاده کن:
+className="w-full max-w-[95vw] lg:max-w-none ..."
+```
+
+**نکته مهم:** ارتفاع پنجره انیمیشن در حالت `lg:` و بالاتر باید دقیقاً همان چیزی باشد که الان هست. فقط در سایزهای کوچک‌تر scale بخورد.
+
+#### مرحله ۴: Anchor Section (متن‌ها و دکمه‌ها)
+```tsx
+// فقط در سایزهای کوچک تنظیم کن:
+className="flex flex-col justify-center 
+           gap-4 sm:gap-5 lg:gap-6    // فقط gap کوچک‌تر در موبایل
+           px-4 sm:px-6 lg:pr-10      // padding کمتر در موبایل
            items-center lg:items-start 
            text-center lg:text-right"
 ```
 
-#### مرحله ۳: Headline
+#### مرحله ۵: Headline — سایز responsive
 ```tsx
-// سایز responsive:
-className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 
-           font-bold text-zinc-100 
-           max-w-4xl leading-[1.2]"
+className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 
+           font-bold text-zinc-100"
+// نکته: سایز lg و xl باید همان سایز فعلی باشد — فقط سایزهای کوچک‌تر اضافه شود
 ```
 
-#### مرحله ۴: IDE Mockup
+#### مرحله ۶: جلوگیری از Overflow افقی
 ```tsx
-// ارتفاع responsive:
-className="w-full max-w-full lg:max-w-[95%] 
-           lg:scale-[0.9] 
-           h-[400px] sm:h-[450px] md:h-[500px] lg:h-[580px]
-           ..."
+// به section اصلی:
+className="... overflow-x-hidden ..."
 
-// Sidebar: مخفی در موبایل
-className="... hidden lg:flex"  // قبلاً: hidden md:flex
-
-// Code Stream Panel: عرض responsive
-className="w-full lg:w-[45%] ..."
+// به همه flex container ها:
+className="... min-w-0 ..."
 ```
 
-#### مرحله ۵: جلوگیری از Overflow
-- به section اصلی `overflow-x-hidden` اضافه کن
-- به همه flex container ها `min-w-0` اضافه کن
-- از `max-w-full` استفاده کن
+#### مرحله ۷: موبایل — ساده‌سازی
+- Sidebar کاملاً مخفی: `hidden lg:flex`
+- متن‌ها وسط‌چین: `text-center lg:text-right`
+- IDE زیر متن‌ها قرار بگیرد (با flex-col)
+- TaskProgressCard: scale کوچک‌تر یا مخفی
 
-#### مرحله ۶: موبایل
-- در موبایل فقط یک ستون نمایش بده
-- IDE Mockup باید زیر متن‌ها باشد
-- Sidebar کاملاً مخفی شود
-- ارتفاع IDE کمتر باشد
-- متون کوچک‌تر باشند
-
-### محدودیت‌های اختصاصی تسک
-- ✅ از mobile-first approach استفاده کن (ابتدا موبایل، بعد lg:)
-- ✅ هر تغییر را در ۴ سایز تست کن: 375px, 768px, 1024px, 1440px
-- ✅ هیچ overflow افقی نباید باشد
+### محدودیت‌های سخت‌گیرانه
+- ✅ از mobile-first approach استفاده کن
+- ✅ تست در ۴ سایز: 375px, 768px, 1024px, 1440px
+- ✅ در 1440px باید دقیقاً مثل قبل باشد
+- ❌ **ارتفاع پنجره انیمیشن را در دسکتاپ تغییر نده**
+- ❌ **ابعاد و موقعیت المان‌ها را در lg و بالاتر تغییر نده**
 - ❌ از `!important` استفاده نکن
-- ❌ از مقادیر `px` ثابت استفاده نکن (مگر برای چیزهای خاص)
+- ❌ مقادیر px ثابت جدید اضافه نکن (مگر برای header offset)
+
+### معیار موفقیت
+1. در 1440px: دقیقاً مثل قبل از این تسک
+2. در 1024px: همه چیز جا می‌شود، هدر overlap نمی‌کند
+3. در 768px: layout تک‌ستونی، المان‌ها scale شده
+4. در 375px: همه چیز خوانا و قابل استفاده
 
 ### کانتکست فایل‌ها
 ```
-CONTEXT_FILES: ["components/sections/hero-section.tsx", "app/globals.css"]
+CONTEXT_FILES: ["components/sections/hero-section.tsx", "components/layout/header.tsx", "app/globals.css"]
 ```
 
 ---
