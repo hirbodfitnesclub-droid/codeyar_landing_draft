@@ -337,10 +337,182 @@ CONTEXT_FILES: ["components/sections/hero-section.tsx", "components/layout/heade
 
 ---
 
-## خلاصه فایل‌های درگیر
+---
+
+## تسک ۸: Loading State حرفه‌ای برای Hero Section
+
+### عنوان تسک
+ایجاد یک صفحه لودینگ زیبا و حرفه‌ای که تا زمان لود کامل محتوا نمایش داده شود
+
+### مشکل فعلی
+وقتی صفحه در حال لود شدن است، المان‌های ناقص و بدون استایل نمایش داده می‌شوند که تجربه کاربری را خراب می‌کند.
+
+### راهنمای پیاده‌سازی فنی
+
+#### مرحله ۱: ایجاد کامپوننت Loading
+یک فایل جدید بساز: `components/ui/hero-loading.tsx`
+
+```tsx
+'use client'
+
+import { motion } from 'framer-motion'
+
+export function HeroLoading() {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-zinc-950">
+      {/* لوگو یا آیکون برند با انیمیشن */}
+      <motion.div
+        className="flex flex-col items-center gap-6"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* لوگوی کدیار یا یک آیکون کد */}
+        <motion.div
+          className="relative"
+          animate={{ 
+            boxShadow: [
+              '0 0 20px rgba(139,92,246,0.3)',
+              '0 0 40px rgba(139,92,246,0.6)',
+              '0 0 20px rgba(139,92,246,0.3)'
+            ]
+          }}
+          transition={{ repeat: Infinity, duration: 2 }}
+        >
+          {/* آیکون یا لوگو اینجا */}
+          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 
+                          flex items-center justify-center">
+            <span className="text-2xl font-bold text-white">{'</>'}</span>
+          </div>
+        </motion.div>
+
+        {/* Progress Bar یا Spinner */}
+        <div className="w-48 h-1 bg-zinc-800 rounded-full overflow-hidden">
+          <motion.div
+            className="h-full bg-gradient-to-r from-violet-500 to-purple-500"
+            initial={{ x: '-100%' }}
+            animate={{ x: '100%' }}
+            transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+          />
+        </div>
+
+        {/* متن لودینگ (اختیاری) */}
+        <motion.p
+          className="text-zinc-500 text-sm"
+          animate={{ opacity: [0.5, 1, 0.5] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+        >
+          در حال آماده‌سازی...
+        </motion.p>
+      </motion.div>
+    </div>
+  )
+}
+```
+
+#### مرحله ۲: اضافه کردن State به Hero Section
+در `hero-section.tsx`:
+
+```tsx
+'use client'
+
+import { useState, useEffect } from 'react'
+import { HeroLoading } from '@/components/ui/hero-loading'
+
+export function HeroSection() {
+  const [isLoaded, setIsLoaded] = useState(false)
+
+  useEffect(() => {
+    // وقتی همه چیز آماده شد
+    // می‌توانی از document.fonts.ready یا تایمر استفاده کنی
+    const timer = setTimeout(() => {
+      setIsLoaded(true)
+    }, 500) // حداقل 500ms برای جلوگیری از flash
+
+    // یا بهتر: صبر کن تا فونت‌ها لود شوند
+    document.fonts.ready.then(() => {
+      setTimeout(() => setIsLoaded(true), 300)
+    })
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (!isLoaded) {
+    return <HeroLoading />
+  }
+
+  // بقیه کد Hero Section...
+}
+```
+
+#### مرحله ۳: انیمیشن ورود محتوا
+وقتی لودینگ تمام شد، محتوا با انیمیشن ظاهر شود:
+
+```tsx
+<motion.section
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 0.5 }}
+  className="..."
+>
+  {/* محتوای Hero */}
+</motion.section>
+```
+
+#### مرحله ۴ (اختیاری): Skeleton Loading
+به جای صفحه سیاه، می‌توانی skeleton نمایش بدهی:
+
+```tsx
+// یک skeleton ساده برای IDE Mockup
+<div className="animate-pulse">
+  <div className="h-[580px] bg-zinc-800/50 rounded-xl" />
+</div>
+```
+
+### محدودیت‌های اختصاصی تسک
+- ✅ لودینگ باید سریع ظاهر شود (بدون delay)
+- ✅ انیمیشن‌ها باید smooth و حرفه‌ای باشند
+- ✅ رنگ‌ها با برند (بنفش) هماهنگ باشند
+- ✅ حداقل ۳۰۰ms لودینگ نمایش داده شود (جلوگیری از flash)
+- ❌ لودینگ بیش از ۲ ثانیه طول نکشد (در شرایط عادی)
+- ❌ از spinner های ساده و بی‌کیفیت استفاده نکن
+- ❌ متن لودینگ نباید خیلی توجه‌برانگیز باشد
+
+### معیار موفقیت
+1. هیچ محتوای ناقص یا شکسته نمایش داده نشود
+2. لودینگ با برند هماهنگ و زیبا باشد
+3. انتقال از لودینگ به محتوا smooth باشد
+4. در mobile و desktop یکسان و زیبا باشد
+
+### کانتکست فایل‌ها
+```
+CONTEXT_FILES: ["components/sections/hero-section.tsx", "app/globals.css"]
+```
+
+---
+
+## ترتیب اجرای تسک‌ها (به‌روزشده)
+
+| اولویت | تسک | وابستگی |
+|--------|-----|---------|
+| 1 | تسک ۴ (تغییر متن headline) | — |
+| 2 | تسک ۶ (تغییر متن subheadline) | — |
+| 3 | تسک ۵ (جمع‌تر کردن سمت راست) | تسک ۴، ۶ |
+| 4 | تسک ۱ (چک‌لیست انگلیسی) | — |
+| 5 | تسک ۲ (فیکس Context Loaded) | — |
+| 6 | تسک ۳ (تایمینگ ۴ ثانیه) | — |
+| 7 | تسک ۷ (Responsive) | همه تسک‌های قبلی |
+| 8 | تسک ۸ (Loading State) | تسک ۷ |
+
+**نکته:** تسک ۸ (Loading) باید بعد از Responsive انجام شود چون لودینگ هم باید responsive باشد.
+
+---
+
+## خلاصه فایل‌های درگیر (به‌روزشده)
 
 | فایل | تسک‌ها |
 |------|--------|
-| `components/sections/hero-section.tsx` | ۲، ۳، ۴، ۵، ۶، ۷ |
+| `components/sections/hero-section.tsx` | ۲، ۳، ۴، ۵، ۶، ۷، ۸ |
 | `components/ui/task-progress-card.tsx` | ۱ |
-| `app/globals.css` | ۷ (در صورت نیاز) |
+| `components/ui/hero-loading.tsx` | ۸ (فایل جدید) |
+| `app/globals.css` | ۷، ۸ (در صورت نیاز) |
