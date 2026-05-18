@@ -3,46 +3,43 @@ import Link from "next/link"
 
 const plans = [
   {
-    name: "Starter",
-    description: "Perfect for side projects and small teams",
-    price: "$0",
-    period: "forever",
-    features: ["Up to 3 team members", "5 projects", "Basic analytics", "Community support", "1GB storage"],
-    cta: "Get Started",
+    name: "استارتاپ",
+    description: "مناسب برای فریلنسرها و شروع قدرتمند پروژه‌ها",
+    price: "۳۵۰,۰۰۰",
+    period: "تومان/ماه",
+    features: ["دسترسی به Claude 3.5 Sonnet", "۱۰ پروژه فعال", "حافظه کانتکست ۱۰۰٪", "پشتیبانی استاندارد", "رفع تحریم تمام سرویس‌ها"],
+    cta: "شروع کار",
     highlighted: false,
   },
   {
-    name: "Pro",
-    description: "For growing teams that need more power",
-    price: "$29",
-    period: "/month",
+    name: "پرو",
+    description: "پیشنهادی برای توسعه‌دهندگان حرفه‌ای و تیم‌ها",
+    price: "۵۹۰,۰۰۰",
+    period: "تومان/ماه",
     features: [
-      "Unlimited team members",
-      "Unlimited projects",
-      "Advanced analytics",
-      "Priority support",
-      "100GB storage",
-      "Custom integrations",
-      "API access",
+      "دسترسی به تمام مدل‌ها (GPT-4o, Claude)",
+      "پروژه‌های نامحدود",
+      "اولویت در پردازش",
+      "پشتیبانی ویژه کدیار",
+      "گزارش عملکرد تیمی",
+      "یکپارچگی با زیرساخت ایران",
     ],
-    cta: "Start Free Trial",
+    cta: "خرید اشتراک پرو",
     highlighted: true,
   },
   {
-    name: "Enterprise",
-    description: "For large organizations with custom needs",
-    price: "Custom",
-    period: "",
+    name: "کلید اختصاصی (BYOK)",
+    description: "فقط از پلتفرم کدیار با کلید API خودتان استفاده کنید",
+    price: "۲۵۰,۰۰۰",
+    period: "تومان/ماه",
     features: [
-      "Everything in Pro",
-      "Dedicated account manager",
-      "Custom SLA",
-      "On-premise deployment",
-      "Unlimited storage",
-      "Advanced security",
-      "Training & onboarding",
+      "استفاده از تمام امکانات پلتفرم",
+      "محدودیت بر اساس کلید شما",
+      "مدیریت متمرکز پروژه",
+      "دسترسی به ابزارهای دیباگ",
+      "بدون هزینه اضافه توکن",
     ],
-    cta: "Contact Sales",
+    cta: "اتصال کلید",
     highlighted: false,
   },
 ]
@@ -53,12 +50,12 @@ export function PricingSection() {
       <div className="max-w-5xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">Pricing</p>
+          <p className="text-sm font-medium text-zinc-500 uppercase tracking-wider mb-4">قیمت‌گذاری</p>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-zinc-100 mb-4">
-            Simple, transparent pricing
+            شروع هوشمندانه، پرداخت منصفانه
           </h2>
           <p className="text-zinc-500 max-w-xl mx-auto text-balance text-lg">
-            No hidden fees. No surprises. Choose the plan that works for you.
+            بدون نیاز به اشتراک‌های ارزی دلاری و دغدغه پرداخت. کدیار متناسب با بودجه توسعه‌دهنده ایرانی طراحی شده است.
           </p>
         </div>
 
